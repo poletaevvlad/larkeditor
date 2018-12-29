@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme id="white" _name="Light scheme" version="1.0">
+
+    <color name="background" value="#FFFFFF" />
+    <color name="foreground" value="#424242" />
+    <color name="line-numbers" value="#B0BEC5" />
+
+    <style name="text" foreground="foreground" background="background" />
+    <style name="line-numbers" foreground="line-numbers" background="background" />
+
+</style-scheme>

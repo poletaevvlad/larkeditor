@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<language id="lark" name="Lark Grammar" version="2.0" _section="Source">
+
+  <styles>
+    <style id="comment" name="Comment" />
+    <style id="string" name="String" />
+    <style id="escaped-char" name="Escaped Character"/>
+
+    <style id="rule" name="Rule" />
+    <style id="rule-specs" name="Rule Specifiers" />
+    <style id="token" name="Token"/>
+    <style id="token-specs" name="Token Specifiers"/>
+    <style id="token-namespace" name="Token Namespace"/>
+    <style id="priority" name="Priority" />
+    <style id="illegal-identifier" name="Illegal Identifier" />
+
+    <style id="statement" name="Statement"/>
+
+    <style id="alias-block" name="Alias Block" />
+    <style id="alias" name="Alias" />
+    <style id="import-alias-block" name="Import Alias Block" />
+    <style id="import-alias" name="Import Alias" />
+  </styles>
+
+  <definitions>
+
+    <context id="string" style-ref="string">
+      <start>"</start>
+      <end>"</end>
+      <include>
+        <context id="string_escaped_char" style-ref="escaped-char">
+          <match>\\.</match>
+        </context>
+      </include>
+    </context>
+
+    <context id="comment" style-ref="comment">
+      <start>\/\/</start>
+      <end>$</end>
+    </context>
+
+
+    <!-- Tokens and rules -->
+
+    <define-regex id="token-name">[A-Z][_A-Z0-9]*</define-regex>
+    <define-regex id="rule-name">[a-z][_a-z0-9]*</define-regex>
+    <define-regex id="namespace-name">[A-Za-z][_A-Za-z0-9]*</define-regex>
+    <define-regex id="alias-re">\-\>\s+(\%{rule-name})</define-regex>
+
+    <context id="token" style-ref="token">
+      <match>(\%{namespace-name}\.)*(_?)\%{token-name}(\.\d*)?</match>
+      <include>
+        <context id="priority" style-ref="priority" sub-pattern="3" />
+        <context id="token-specs" style-ref="token-specs" sub-pattern="2" />
+        <context id="token-namespace" style-ref="token-namespace" sub-pattern="1" />
+      </include>
+    </context>
+
+    <context id="rule" style-ref="rule">
+      <match>(!?[_?]?)\%{rule-name}(\.\d*)?</match>
+      <include>
+        <context id="priority" style-ref="priority" sub-pattern="2" />
+        <context id="rule-specs" style-ref="rule-specs" sub-pattern="1" />
+      </include>
+    </context>
+
+    <context id="alias-block" style-ref="alias-block">
+        <match>\-\>\s*([a-z][_a-z0-9]*)</match>
+        <include>
+            <context id="alias" style-ref="alias" sub-pattern="1" />
+        </include>
+    </context>
+
+    <context id="illegal-identifier" style-ref="illegal-identifier">
+        <match>([a-z][_a-zA-Z]*[A-Z][_a-zA-Z]*|[A-Z][_a-zA-Z]*[a-z][_a-zA-Z]*)</match>
+    </context>
+
+
+    <!-- Statements -->
+
+    <context id="statement-ignore" style-ref="statement" end-at-line-end="true">
+      <start>%ignore</start>
+      <include>
+        <context ref="token" />
+        <context ref="regex:regex" />
+        <context ref="comment" />
+      </include>
+    </context>
+
+    <context id="statement-declare" style-ref="statement" end-at-line-end="true">
+      <start>%declare</start>
+      <include>
+        <context ref="token" />
+        <context ref="rule" />
+      </include>
+    </context>
+
+    <context id="statement-import" style-ref="statement" end-at-line-end="true">
+      <start>%import</start>
+      <include>
+        <context ref="token" />
+
+        <context id="import-alias-block" style-ref="import-alias-block">
+            <match>\-\>\s*(_?\%{token-name})</match>
+            <include>
+                <context id="import-alias" style-ref="import-alias" sub-pattern="1" />
+            </include>
+        </context>
+      </include>
+    </context>
+
+
+    <!-- Root context -->
+
+    <context id="lark">
+      <include>
+        <context ref="illegal-identifier" />
+        <context ref="comment" />
+        <context ref="regex:regex" />
+        <context ref="token" />
+        <context ref="rule" />
+        <context ref="string" />
+        <context ref="statement-ignore" />
+        <context ref="statement-declare" />
+        <context ref="statement-import" />
+        <context ref="alias-block" />
+      </include>
+    </context>
+
+  </definitions>
+</language>

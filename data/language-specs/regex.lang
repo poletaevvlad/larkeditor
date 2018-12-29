@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<language id="regex" name="Regular Expression" version="2.0" _section="Source">
+  <styles>
+    <style id="regex" name="Regular Expression" />
+    <style id="escaped" name="RegEx Escaped Characted" />
+    <style id="directive" name="RegEx Directive" />
+  </styles>
+
+  <definitions>
+    <context id="regex" style-ref="regex">
+      <start>\/</start>
+      <end>(?&lt;!\\)\/[imslux]*</end>
+      <include>
+        <context id="directive" style-ref="directive">
+          <match>\\([nrtRabBefv0-7]|c[A-Za-z]|o?[0-7]+)</match>
+        </context>
+        <context id="escaped" style-ref="escaped">
+            <match>\\.</match>
+        </context>
+      </include>
+    </context>
+  </definitions>
+</language>

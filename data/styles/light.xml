@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<style-scheme id="light" _name="Light scheme" version="1.0">
+
+    <color name="background" value="#E9EEF2" />
+    <color name="foreground" value="#424242" />
+    <color name="line-numbers" value="#B0BEC5" />
+
+    <style name="text" foreground="foreground" background="background" />
+    <style name="line-numbers" foreground="line-numbers" background="background" />
+
+
+    <!-- Lark specific styles -->
+
+    <style name="lark:comment" foreground="#A3A3A3" />
+    <style name="lark:string" foreground="#259B24" />
+    <style name="lark:escaped-char" foreground="#44BDB3" />
+
+    <style name="lark:rule" foreground="#0288D1" />
+    <style name="lark:rule-specs" foreground="#55ADE0" />
+    <style name="lark:token" foreground="#FF5722" />
+    <style name="lark:token-specs" foreground="#EB997B" />
+    <style name="lark:token-namespace" foreground="#FB8419" />
+    <style name="lark:priority" foreground="#7e57c2" />
+
+    <style name="lark:statement" foreground="#7E57C2" />
+
+    <style name="lark:alias" foreground="#607D8B" />
+    <style name="lark:alias-block" foreground="#86A2B0" />
+    <style name="lark:import-alias" foreground="#8A6C5E" />
+    <style name="lark:import-alias-block" foreground="#A38B7F" />
+
+    <style name="lark:illegal-identifier" underline="error" underline-color="#FD971F" />
+    <style name="lark:regex" />
+
+
+    <!-- Regular expressions -->
+    <style name="regex:regex" foreground="#009688" />
+    <style name="regex:directive" foreground="#259B24" />
+    <style name="regex:escaped" foreground="#7E57C2" />
+
+</style-scheme>
