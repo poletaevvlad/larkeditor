@@ -1,5 +1,5 @@
 from pathlib import Path
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from gi.repository import GLib
 from typing import Optional, Set, Dict
 from gettext import gettext
@@ -11,11 +11,11 @@ from editor.text_editor import TextEditor
 from header_bar import HeaderBar
 from lark_parser import LarkParser
 from results import ParsingResultsView
-from utils import create_file_filter, show_error_message
+from utils import create_file_filter, show_error_message, HotKeys
+from editor.source_editor import LarkSourceEditor
 
 _ = gettext
-
-from editor.source_editor import LarkSourceEditor
+hot_keys = HotKeys()
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -45,6 +45,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.header_bar.init_title(self.lark_source.file_name, self.lark_source.changed)
         self.header_bar.open_callback = self._open_file
         self.header_bar.save_callback = self._save_file
+        hot_keys.apply_to_window(self)
 
     def _create_layout(self, source_view: LarkSourceEditor, result_view: ParsingResultsView, text_view: TextEditor):
         text_view.view.show()
@@ -108,6 +109,7 @@ class MainWindow(Gtk.ApplicationWindow):
         scroll_view.show()
         return scroll_view
 
+    @hot_keys.add(Gdk.KEY_O, Gdk.ModifierType.CONTROL_MASK)
     def _open_file(self):
         dialog = Gtk.FileChooserDialog(_("Open grammar"), self, Gtk.FileChooserAction.OPEN,
                                        (_("Cancel"), Gtk.ResponseType.CANCEL, _("OK"), Gtk.ResponseType.ACCEPT))
@@ -126,6 +128,8 @@ class MainWindow(Gtk.ApplicationWindow):
         else:
             dialog.destroy()
 
+    @hot_keys.add(Gdk.KEY_S, Gdk.ModifierType.CONTROL_MASK, [False])
+    @hot_keys.add(Gdk.KEY_S, Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK, [True])
     def _save_file(self, new_file: bool):
         file_path = self.lark_source.file_name.value
         if file_path is None or new_file:
