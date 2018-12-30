@@ -21,13 +21,15 @@ class HeaderBar:
         ui_path = Path(__file__).parents[1] / "data" / "ui" / "header-bar.ui"
         builder = Gtk.Builder()
         builder.add_from_file(str(ui_path))
+        builder.connect_signals(self)
 
         self.header_bar: Gtk.HeaderBar = builder.get_object("header_bar")
         self.popover: Gtk.Popover = builder.get_object("menu_popover")
-        builder.connect_signals(self)
+        self.parse_button_stack: Gtk.Stack = builder.get_object("parse-button-stack")
 
         self.open_callback: Callable[[], None] = None
         self.save_callback: Callable[[bool], None] = None
+        self.parse_callback: Callable[[], None] = None
 
     def apply_to_window(self, window: Gtk.Window) -> None:
         window.set_titlebar(self.header_bar)
@@ -58,3 +60,10 @@ class HeaderBar:
 
     _on_save = signal_handle_calls_callback("save_callback", False)
     _on_open = signal_handle_calls_callback("open_callback")
+    _on_parse_request = signal_handle_calls_callback("parse_callback")
+
+    def set_running(self, running: bool):
+        if running:
+            self.parse_button_stack.set_visible_child_name("parse-button-processing")
+        else:
+            self.parse_button_stack.set_visible_child_name("parse-button-idle")

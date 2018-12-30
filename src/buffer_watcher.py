@@ -15,6 +15,7 @@ class BufferWatcher:
         self._event: threading.Event = threading.Event()
         self._lock: threading.Lock = threading.Lock()
         self._running = False
+        self._force_process = False
         self._changed = set()
         self._signals = dict()
 
@@ -60,13 +61,18 @@ class BufferWatcher:
             wait_result = self._event.wait(self.timeout) if has_changes else self._event.wait()
             self._lock.acquire()
 
-            if not wait_result:
+            if not wait_result or self._force_process:
                 text = dict()
                 for key in self.buffers:
                     buffer = self.buffers[key]
                     text[key] = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
                 self.callback(self._changed, text)
                 self._changed.clear()
+                self._force_process = False
             running = self._running
             self._event.clear()
         self._lock.release()
+
+    def force_processing(self):
+        self._force_process = True
+        self._event.set()

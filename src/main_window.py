@@ -45,6 +45,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self.header_bar.init_title(self.lark_source.file_name, self.lark_source.changed)
         self.header_bar.open_callback = self._open_file
         self.header_bar.save_callback = self._save_file
+        self.header_bar.parse_callback = self.watcher.force_processing
+        self.parser.running.bind(self.header_bar.set_running)
         hot_keys.apply_to_window(self)
 
     def _create_layout(self, source_view: LarkSourceEditor, result_view: ParsingResultsView, text_view: TextEditor):
@@ -71,9 +73,10 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def _watcher_callback(self, changed: Set[str], texts: Dict[str, str]):
         try:
+            grammar = None
             if self.parser.lark is None or MainWindow.BUFFER_LARK_SOURCE in changed:
-                self.parser.set_grammar(texts[MainWindow.BUFFER_LARK_SOURCE])
-            tree = self.parser.parse(texts[MainWindow.BUFFER_TEXT])
+                grammar = texts[MainWindow.BUFFER_LARK_SOURCE]
+            tree = self.parser.parse(texts[MainWindow.BUFFER_TEXT], grammar=grammar)
             GLib.idle_add(self._display_tree, tree)
         except Exception as e:
             GLib.idle_add(self._display_error, e)

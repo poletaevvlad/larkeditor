@@ -63,6 +63,51 @@
         <property name="position">2</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkStack" id="parse-button-stack">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="_on_parse_request" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="stock">gtk-media-play</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">parse-button-idle</property>
+            <property name="title" translatable="yes">page0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinner">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">10</property>
+            <property name="margin_right">10</property>
+            <property name="margin_top">10</property>
+            <property name="margin_bottom">10</property>
+            <property name="active">True</property>
+          </object>
+          <packing>
+            <property name="name">parse-button-processing</property>
+            <property name="title" translatable="yes">page1</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkAdjustment" id="intervalAdjustment">
     <property name="lower">0.10000000000000001</property>
