@@ -1,35 +1,24 @@
-from pathlib import Path
-from typing import Optional, Callable
 from gettext import gettext
+from pathlib import Path
+from typing import Optional
+
+from gi.repository import Gtk
 
 from utils import Observable, ObservableUnion
-from gi.repository import Gtk
 
 _ = gettext
 
 
-def signal_handle_calls_callback(name: str, *args):
-    def handler(self, _object):
-        callback = getattr(self, name)
-        if callback is not None:
-            callback(*args)
-    return handler
-
-
 class HeaderBar:
     def __init__(self):
-        ui_path = Path(__file__).parents[1] / "data" / "ui" / "header-bar.ui"
+        ui_path = Path(__file__).parents[1] / "data" / "ui"
         builder = Gtk.Builder()
-        builder.add_from_file(str(ui_path))
+        builder.add_from_file(str(ui_path / "header-bar.ui"))
         builder.connect_signals(self)
 
         self.header_bar: Gtk.HeaderBar = builder.get_object("header_bar")
         self.popover: Gtk.Popover = builder.get_object("menu_popover")
         self.parse_button_stack: Gtk.Stack = builder.get_object("parse-button-stack")
-
-        self.open_callback: Callable[[], None] = None
-        self.save_callback: Callable[[bool], None] = None
-        self.parse_callback: Callable[[], None] = None
 
     def apply_to_window(self, window: Gtk.Window) -> None:
         window.set_titlebar(self.header_bar)
@@ -57,10 +46,6 @@ class HeaderBar:
         self.popover.set_relative_to(button)
         self.popover.show()
         self.popover.popup()
-
-    _on_save = signal_handle_calls_callback("save_callback", False)
-    _on_open = signal_handle_calls_callback("open_callback")
-    _on_parse_request = signal_handle_calls_callback("parse_callback")
 
     def set_running(self, running: bool):
         if running:

@@ -1,7 +1,9 @@
 from pathlib import Path
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GLib
-from typing import Optional, Set, Dict
+from gi.repository import Gio
+from typing import Optional, Set, Dict, Callable
 from gettext import gettext
 import lark
 import re
@@ -43,26 +45,38 @@ class MainWindow(Gtk.ApplicationWindow):
         self.header_bar = HeaderBar()
         self.header_bar.apply_to_window(self)
         self.header_bar.init_title(self.lark_source.file_name, self.lark_source.changed)
-        self.header_bar.open_callback = self._open_file
-        self.header_bar.save_callback = self._save_file
         self.header_bar.parse_callback = self.watcher.force_processing
         self.parser.running.bind(self.header_bar.set_running)
         hot_keys.apply_to_window(self)
 
+        self._create_action("save", lambda: self._save_file(False))
+        self._create_action("save_as", lambda: self._save_file(True))
+
+    def _create_action(self, name: str, callback: Callable[[], None]):
+        action: Gio.SimpleAction = Gio.SimpleAction.new(name, None)
+        action.connect("activate", lambda action, parameter: callback())
+        self.add_action(action)
+
     def _create_layout(self, source_view: LarkSourceEditor, result_view: ParsingResultsView, text_view: TextEditor):
+        def _wrap_scroll_view(view):
+            scroll_view = Gtk.ScrolledWindow()
+            scroll_view.add(view)
+            scroll_view.show()
+            return scroll_view
+
         text_view.view.show()
         result_view.view.hide()
         source_view.view.show()
 
         sidebar_split = Gtk.Paned()
         sidebar_split.set_orientation(Gtk.Orientation.VERTICAL)
-        sidebar_split.add1(self._wrap_scroll_view(text_view.view))
+        sidebar_split.add1(_wrap_scroll_view(text_view.view))
         sidebar_split.add2(result_view.view)
         sidebar_split.set_position(150)
         sidebar_split.show()
 
         main_split = Gtk.Paned()
-        source_scroll_view = self._wrap_scroll_view(source_view.view)
+        source_scroll_view = _wrap_scroll_view(source_view.view)
         main_split.add1(source_scroll_view)
         main_split.add2(sidebar_split)
         main_split.show()
@@ -104,13 +118,6 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.lark_source.underline_error(line, column, 1)
         self.parsing_results.show_error(exception)
         self.parsing_results.view.show()
-
-    @staticmethod
-    def _wrap_scroll_view(view):
-        scroll_view = Gtk.ScrolledWindow()
-        scroll_view.add(view)
-        scroll_view.show()
-        return scroll_view
 
     @hot_keys.add(Gdk.KEY_O, Gdk.ModifierType.CONTROL_MASK)
     def _open_file(self):
