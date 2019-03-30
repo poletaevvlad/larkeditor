@@ -51,6 +51,8 @@ class MainWindow(Gtk.ApplicationWindow):
 
         self._create_action("save", lambda: self._save_file(False))
         self._create_action("save_as", lambda: self._save_file(True))
+        self._create_action("load_text", self._open_text)
+        self._create_action("save_text", self._save_text)
 
     def _create_action(self, name: str, callback: Callable[[], None]):
         action: Gio.SimpleAction = Gio.SimpleAction.new(name, None)
@@ -160,3 +162,31 @@ class MainWindow(Gtk.ApplicationWindow):
             show_error_message(self, _("Unable to save a file"),
                                _("An error has occurred when trying to save a file \"{0}\": {1}")
                                .format(e.filename, e.strerror))
+
+    def _open_text(self):
+        dialog = Gtk.FileChooserDialog(_("Open text"), self, Gtk.FileChooserAction.OPEN,
+                                       (_("Cancel"), Gtk.ResponseType.CANCEL, _("OK"), Gtk.ResponseType.ACCEPT))
+        if dialog.run() == Gtk.ResponseType.ACCEPT:
+            try:
+                self.text_view.load_file(Path(dialog.get_filename()))
+            except IOError as e:
+                message = _("Unable to open '{}' for reading:\n{}").format(dialog.get_filename(), str(e))
+                error_dialog = Gtk.MessageDialog(self, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+                                                 message)
+                error_dialog.run()
+                error_dialog.destroy()
+        dialog.destroy()
+
+    def _save_text(self):
+        dialog = Gtk.FileChooserDialog(_("Save text as"), self, Gtk.FileChooserAction.SAVE,
+                                       (_("Cancel"), Gtk.ResponseType.CANCEL, _("OK"), Gtk.ResponseType.ACCEPT))
+        if dialog.run() == Gtk.ResponseType.ACCEPT:
+            try:
+                self.text_view.save_file(Path(dialog.get_filename()))
+            except IOError as e:
+                message = _("Unable to open '{}' for writing:\n{}").format(dialog.get_filename(), str(e))
+                error_dialog = Gtk.MessageDialog(self, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+                                                 message)
+                error_dialog.run()
+                error_dialog.destroy()
+        dialog.destroy()
