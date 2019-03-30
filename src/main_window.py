@@ -53,6 +53,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self._create_action("save_as", lambda: self._save_file(True))
         self._create_action("load_text", self._open_text)
         self._create_action("save_text", self._save_text)
+        self._create_action("run_parsing", self.watcher.force_processing)
+        self._create_action("open", self._open_file)
 
     def _create_action(self, name: str, callback: Callable[[], None]):
         action: Gio.SimpleAction = Gio.SimpleAction.new(name, None)
