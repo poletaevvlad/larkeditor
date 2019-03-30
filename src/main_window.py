@@ -131,16 +131,18 @@ class MainWindow(Gtk.ApplicationWindow):
         dialog.add_filter(create_file_filter(_("All files"), patterns=["*"]))
         result = dialog.run()
         if result == Gtk.ResponseType.ACCEPT:
-            try:
-                filename = Path(dialog.get_filename())
-                dialog.destroy()
-                self.lark_source.load_file(filename)
-            except OSError as e:
-                show_error_message(self, _("Unable to open a file"),
-                                   _("An error has occurred when trying to open a file \"{0}\": {1}")
-                                   .format(e.filename, e.strerror))
-        else:
-            dialog.destroy()
+            filename = Path(dialog.get_filename())
+            if not self.lark_source.changed.value and self.lark_source.file_name.value is None:
+                try:
+                    self.lark_source.load_file(filename)
+                except OSError as e:
+                    show_error_message(self, _("Unable to open a file"),
+                                       _("An error has occurred when trying to open a file \"{0}\": {1}")
+                                       .format(e.filename, e.strerror))
+            else:
+                app: Gtk.Application = self.get_application()
+                app.activate_action("open", GLib.Variant.new_string(str(filename)))
+        dialog.destroy()
 
     @hot_keys.add(Gdk.KEY_S, Gdk.ModifierType.CONTROL_MASK, [False])
     @hot_keys.add(Gdk.KEY_S, Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK, [True])
@@ -173,10 +175,7 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.text_view.load_file(Path(dialog.get_filename()))
             except IOError as e:
                 message = _("Unable to open '{}' for reading:\n{}").format(dialog.get_filename(), str(e))
-                error_dialog = Gtk.MessageDialog(self, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                                                 message)
-                error_dialog.run()
-                error_dialog.destroy()
+                show_error_message(self, _("Unable to save a file"), message)
         dialog.destroy()
 
     def _save_text(self):
@@ -187,8 +186,5 @@ class MainWindow(Gtk.ApplicationWindow):
                 self.text_view.save_file(Path(dialog.get_filename()))
             except IOError as e:
                 message = _("Unable to open '{}' for writing:\n{}").format(dialog.get_filename(), str(e))
-                error_dialog = Gtk.MessageDialog(self, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                                                 message)
-                error_dialog.run()
-                error_dialog.destroy()
+                show_error_message(self, _("Unable to open a file"), message)
         dialog.destroy()
