@@ -2,3 +2,6 @@
 *.iml
 __pycache__
 *.ui~
+build
+dist
+*.egg-info

@@ -12,7 +12,7 @@ _ = gettext
 
 class HeaderBar:
     def __init__(self, watcher: BufferWatcher):
-        ui_path = Path(__file__).parents[1] / "data" / "ui"
+        ui_path = Path(__file__).parents[0] / "data" / "ui"
         builder = Gtk.Builder()
         builder.add_from_file(str(ui_path / "header-bar.ui"))
         builder.connect_signals(self)

@@ -11,7 +11,7 @@ from ..utils import Observable
 def get_style_scheme_manager() -> GtkSource.StyleSchemeManager:
     manager = GtkSource.StyleSchemeManager.new()
     search_path = manager.get_search_path()
-    search_path.insert(0, str(Path(__file__).parents[2] / "data" / "styles"))
+    search_path.insert(0, str(Path(__file__).parents[1] / "data" / "styles"))
     manager.set_search_path(search_path)
     return manager
 
@@ -19,7 +19,7 @@ def get_style_scheme_manager() -> GtkSource.StyleSchemeManager:
 def get_languages_manager() -> GtkSource.LanguageManager:
     manager = GtkSource.LanguageManager.new()
     search_path = manager.get_search_path()
-    search_path.insert(0, str(Path(__file__).parents[2] / "data" / "language-specs"))
+    search_path.insert(0, str(Path(__file__).parents[1] / "data" / "language-specs"))
     manager.set_search_path(search_path)
     return manager
 

@@ -13,7 +13,7 @@ class ParsingResultsView:
 
     def __init__(self):
         builder = Gtk.Builder()
-        builder.add_from_file(str(Path(__file__).parents[1] / "data" / "ui" / "parsing-results.ui"))
+        builder.add_from_file(str(Path(__file__).parents[0] / "data" / "ui" / "parsing-results.ui"))
         self.view: Gtk.Stack = builder.get_object("parsing_results")
         self.tree: Gtk.TreeView = builder.get_object("tree")
         self.error_name: Gtk.Label = builder.get_object("error_name")

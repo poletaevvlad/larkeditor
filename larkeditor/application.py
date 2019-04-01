@@ -65,4 +65,8 @@ class Application(Gtk.Application):
         dialog.set_version(VERSION)
         dialog.set_copyright("Copyright © 2019 - Vlad Poletaev")
         dialog.set_license_type(Gtk.License.BSD)
+        dialog.set_website("https://github.com/poletaevvlad/larkeditor")
+        dialog.set_website_label("This project on GitHub")
+        dialog.set_comments("An editor for EBNF grammars, used by Lark – "
+                            "parsing library for Python")
         dialog.show()
