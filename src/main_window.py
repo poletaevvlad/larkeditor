@@ -4,7 +4,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 from typing import Optional, Set, Dict, Callable
-from gettext import gettext
+from gettext import gettext as _
 import lark
 import re
 
@@ -16,7 +16,6 @@ from results import ParsingResultsView
 from utils import create_file_filter, show_error_message, HotKeys
 from editor.source_editor import LarkSourceEditor
 
-_ = gettext
 hot_keys = HotKeys()
 
 
