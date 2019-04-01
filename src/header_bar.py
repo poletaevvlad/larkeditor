@@ -4,18 +4,20 @@ from typing import Optional
 
 from gi.repository import Gtk
 
+from buffer_watcher import BufferWatcher
 from utils import Observable, ObservableUnion
 
 _ = gettext
 
 
 class HeaderBar:
-    def __init__(self):
+    def __init__(self, watcher: BufferWatcher):
         ui_path = Path(__file__).parents[1] / "data" / "ui"
         builder = Gtk.Builder()
         builder.add_from_file(str(ui_path / "header-bar.ui"))
         builder.connect_signals(self)
 
+        self.watcher = watcher
         self.header_bar: Gtk.HeaderBar = builder.get_object("header_bar")
         self.popover: Gtk.Popover = builder.get_object("menu_popover")
         self.parse_button_stack: Gtk.Stack = builder.get_object("parse-button-stack")
@@ -52,3 +54,16 @@ class HeaderBar:
             self.parse_button_stack.set_visible_child_name("parse-button-processing")
         else:
             self.parse_button_stack.set_visible_child_name("parse-button-idle")
+
+    def _on_start_changed(self, editable: Gtk.Entry) -> None:
+        text: str = editable.get_text()
+        text = text.strip()
+        if len(text) > 0:
+            self.watcher.set_parameters(start=text)
+
+    def _on_start_blur(self, editable: Gtk.Entry, _data: None) -> None:
+        text: str = editable.get_text().strip()
+        if (len(text)) == 0:
+            editable.set_text("start")
+            self.watcher.set_parameters(start="start")
+

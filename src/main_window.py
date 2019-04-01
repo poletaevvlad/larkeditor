@@ -41,7 +41,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.watcher.start()
         self.connect("destroy", lambda window: self.watcher.stop())
 
-        self.header_bar = HeaderBar()
+        self.header_bar = HeaderBar(self.watcher)
         self.header_bar.apply_to_window(self)
         self.header_bar.init_title(self.lark_source.file_name, self.lark_source.changed)
         self.header_bar.parse_callback = self.watcher.force_processing
@@ -90,10 +90,12 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def _watcher_callback(self, changed: Set[str], texts: Dict[str, str]):
         try:
+            grammar_changed = any(x in changed for x in {MainWindow.BUFFER_LARK_SOURCE, BufferWatcher.PARAMETERS})
             grammar = None
-            if self.parser.lark is None or MainWindow.BUFFER_LARK_SOURCE in changed:
+            if self.parser.lark is None or grammar_changed:
                 grammar = texts[MainWindow.BUFFER_LARK_SOURCE]
-            tree = self.parser.parse(texts[MainWindow.BUFFER_TEXT], grammar=grammar)
+            tree = self.parser.parse(texts[MainWindow.BUFFER_TEXT], grammar=grammar, start=self.watcher.start_rule,
+                                     parser=self.watcher.parser)
             GLib.idle_add(self._display_tree, tree)
         except Exception as e:
             GLib.idle_add(self._display_error, e)

@@ -6,10 +6,14 @@ Callback = Callable[[Set[Any], Dict[Any, str]], None]
 
 
 class BufferWatcher:
+    PARAMETERS = "parameters"
+
     def __init__(self, timeout: float, callback: Callback):
         self.timeout: float = timeout
         self.buffers: Dict[Any, Gtk.TextBuffer] = {}
         self.callback = callback
+        self.start_rule = "start"
+        self.parser = "earley"
 
         self._thread: Optional[threading.Timer] = None
         self._event: threading.Event = threading.Event()
@@ -34,6 +38,13 @@ class BufferWatcher:
         for key in self.buffers:
             self._signals[key] = self.buffers[key].connect("changed", lambda _, key=key: self._buffer_changed(key))
         self._event.set()
+
+    def set_parameters(self, start: Optional[str] = None, parser: Optional[str] = None):
+        if start is not None:
+            self.start_rule = start
+        if parser is not None:
+            self.parser = parser
+        self._buffer_changed(BufferWatcher.PARAMETERS)
 
     def _buffer_changed(self, key):
         with self._lock:
