@@ -28,7 +28,7 @@ class TextEditor:
     style_scheme_manager = get_style_scheme_manager()
     language_manager = get_languages_manager()
 
-    def __init__(self, scheme_name:str, language_name: Optional[str] = None):
+    def __init__(self, scheme_name: str, language_name: Optional[str] = None):
         if language_name is not None:
             language = TextEditor.language_manager.get_language(language_name)
             self.buffer: GtkSource.Buffer = GtkSource.Buffer.new_with_language(language)
@@ -72,4 +72,3 @@ class TextEditor:
 
     def clear_error(self):
         self.buffer.remove_tag(self.error_tag, self.buffer.get_start_iter(), self.buffer.get_end_iter())
-

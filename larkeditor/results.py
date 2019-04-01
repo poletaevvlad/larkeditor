@@ -86,6 +86,6 @@ class ParsingResultsView:
             module = error.__module__
             if module == "lark.exceptions":
                 module = "lark"
-            self.error_type.set_text("{}.{}".format(module, error.__class__.__name__  ))
+            self.error_type.set_text("{}.{}".format(module, error.__class__.__name__))
         else:
-            self.error_type.set_text(error.__class__.__name__  )
+            self.error_type.set_text(error.__class__.__name__)
