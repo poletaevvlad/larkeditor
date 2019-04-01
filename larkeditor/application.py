@@ -1,5 +1,3 @@
-import sys
-import signal
 import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version("GtkSource", "3.0")
@@ -7,12 +5,12 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gio
 
-from main_window import MainWindow
 from typing import List
 from pathlib import Path
 from gettext import gettext as _
 
-from utils import show_error_message
+from .main_window import MainWindow
+from .utils import show_error_message
 
 VERSION = "0.1.0"
 
@@ -71,9 +69,3 @@ class Application(Gtk.Application):
         dialog.set_copyright("Copyright © 2019 - Vlad Poletaev")
         dialog.set_license_type(Gtk.License.BSD)
         dialog.show()
-
-
-if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-    app = Application()
-    app.run(sys.argv)

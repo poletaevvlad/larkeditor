@@ -1,5 +1,5 @@
-from typing import TypeVar, Generic, Callable, List, Tuple
 from abc import ABC, abstractmethod
+from typing import TypeVar, Generic, Callable, Tuple
 
 T = TypeVar("T")
 Callback = Callable[[T], None]

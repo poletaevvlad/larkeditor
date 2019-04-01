@@ -8,13 +8,13 @@ from gettext import gettext as _
 import lark
 import re
 
-from buffer_watcher import BufferWatcher
-from editor.text_editor import TextEditor
-from header_bar import HeaderBar
-from lark_parser import LarkParser
-from results import ParsingResultsView
-from utils import create_file_filter, show_error_message, HotKeys
-from editor.source_editor import LarkSourceEditor
+from .buffer_watcher import BufferWatcher
+from .editor.text_editor import TextEditor
+from .header_bar import HeaderBar
+from .lark_parser import LarkParser
+from .results import ParsingResultsView
+from .utils import create_file_filter, show_error_message, HotKeys
+from .editor.source_editor import LarkSourceEditor
 
 hot_keys = HotKeys()
 

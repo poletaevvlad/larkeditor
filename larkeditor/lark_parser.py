@@ -1,6 +1,6 @@
 import lark
 from typing import Optional
-from utils import Observable
+from .utils import Observable
 from gi.repository import GLib
 
 

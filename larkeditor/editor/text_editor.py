@@ -5,7 +5,7 @@ from gi.repository import GtkSource
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from utils import Observable
+from ..utils import Observable
 
 
 def get_style_scheme_manager() -> GtkSource.StyleSchemeManager:

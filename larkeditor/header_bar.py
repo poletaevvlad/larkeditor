@@ -4,8 +4,8 @@ from typing import Optional
 
 from gi.repository import Gtk
 
-from buffer_watcher import BufferWatcher
-from utils import Observable, ObservableUnion
+from .buffer_watcher import BufferWatcher
+from .utils import Observable, ObservableUnion
 
 _ = gettext
 

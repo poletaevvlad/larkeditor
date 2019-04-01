@@ -3,8 +3,8 @@ from typing import Optional
 
 from gi.repository import GtkSource
 
-from editor.text_editor import TextEditor
-from utils import Observable
+from .text_editor import TextEditor
+from ..utils import Observable
 from .completion import CompletionProvider
 
 
