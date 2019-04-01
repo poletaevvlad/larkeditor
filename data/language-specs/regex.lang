@@ -2,7 +2,7 @@
 <language id="regex" name="Regular Expression" version="2.0" _section="Source">
   <styles>
     <style id="regex" name="Regular Expression" />
-    <style id="escaped" name="RegEx Escaped Characted" />
+    <style id="escaped" name="RegEx Escaped Character" />
     <style id="directive" name="RegEx Directive" />
   </styles>
 
