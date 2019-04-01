@@ -4,7 +4,7 @@ from gi.repository import Gtk
 
 
 class SymbolsSet:
-    SYMBOL_CHARS = {*string.ascii_lowercase, *string.ascii_uppercase, *string.digits, "_", "."}
+    SYMBOL_CHARS = {*string.ascii_lowercase, *string.ascii_uppercase, *string.digits, "_"}
 
     def __init__(self):
         self._symbols: Set[str] = set()
