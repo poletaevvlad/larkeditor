@@ -128,12 +128,13 @@
             <property name="homogeneous">True</property>
             <child>
               <object class="GtkRadioButton" id="early_parser">
-                <property name="label" translatable="yes">Early</property>
+                <property name="label" translatable="yes">Earley</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">False</property>
+                <signal name="toggled" handler="_on_parser_set_earley" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -143,13 +144,14 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="larl_parser">
-                <property name="label" translatable="yes">LARL</property>
+                <property name="label" translatable="yes">LALR</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">False</property>
                 <property name="group">early_parser</property>
+                <signal name="toggled" handler="_on_parser_set_lalr" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -166,6 +168,7 @@
                 <property name="active">True</property>
                 <property name="draw_indicator">False</property>
                 <property name="group">early_parser</property>
+                <signal name="toggled" handler="_on_parser_set_cyk" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

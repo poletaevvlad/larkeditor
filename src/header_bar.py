@@ -67,3 +67,17 @@ class HeaderBar:
             editable.set_text("start")
             self.watcher.set_parameters(start="start")
 
+    # Have to use three different callbacks because Glade does not support passing
+    # user data other then Grade objects to signal handlers
+
+    def _on_parser_set_earley(self, radio: Gtk.RadioButton) -> None:
+        if radio.get_active():
+            self.watcher.set_parameters(parser="earley")
+
+    def _on_parser_set_lalr(self, radio: Gtk.RadioButton) -> None:
+        if radio.get_active():
+            self.watcher.set_parameters(parser="lalr")
+
+    def _on_parser_set_cyk(self, radio: Gtk.RadioButton) -> None:
+        if radio.get_active():
+            self.watcher.set_parameters(parser="cyk")
