@@ -18,7 +18,7 @@ to be used during the development of another project, I have not written any
 automatic tests due to time constraints. The dark version of the UI has not been
 implemented yet.
 
-![](https://github.com/poletaevvlad/larkeditor/tree/master/screenshots/arithmetic.png)
+![](https://raw.githubusercontent.com/poletaevvlad/larkeditor/master/screenshots/arithmetic.png)
 
 ## Installation
 
@@ -71,7 +71,7 @@ or
 python3 -m larkeditor
 ```
 
-![](https://github.com/poletaevvlad/larkeditor/tree/master/screenshots/python-error.png)
+![](https://raw.githubusercontent.com/poletaevvlad/larkeditor/master/screenshots/python-error.png)
 
 ## License
 
