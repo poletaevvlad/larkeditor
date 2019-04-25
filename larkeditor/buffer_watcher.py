@@ -77,7 +77,7 @@ class BufferWatcher:
                 for key in self.buffers:
                     buffer = self.buffers[key]
                     text[key] = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
-                self.callback(self._changed, text)
+                self.callback(self._changed.copy(), text)
                 self._changed.clear()
                 self._force_process = False
             running = self._running
